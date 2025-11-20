@@ -1,0 +1,355 @@
+# Lab Instructions: Script Execution Guide
+
+This document provides detailed step-by-step instructions for executing the PII Data Protection Hands-on Lab scripts in Snowsight.
+
+---
+
+## 📋 Prerequisites
+
+Before starting the lab, ensure you have:
+
+1. **Snowflake Account:** Enterprise Edition or higher
+2. **Required Roles:** Access to ACCOUNTADMIN, SECURITYADMIN, SYSADMIN, and USERADMIN
+3. **Sample Data:** Access to `SNOWFLAKE_SAMPLE_DATA` database
+4. **Warehouse:** A warehouse available for compute (or permissions to create one)
+5. **Browser:** Snowsight web interface open and ready
+
+---
+
+## 🚀 Script Execution Order
+
+Execute the scripts in the following order. **Do not skip scripts** as each builds upon the previous one.
+
+### Phase 1: Environment Setup (20 minutes)
+
+#### Script 1: Setup Users and Roles
+**File:** `scripts/01_setup_users_roles.sql`  
+**Role Required:** USERADMIN  
+**Description:** Creates six demo users and five custom roles for the lab
+
+**What it does:**
+- Creates custom roles: `itc_admin`, `marketing`, `it`, `infosec`, `executive`
+- Creates six users based on "The IT Crowd" TV show characters
+- Sets default warehouses and roles for each user
+
+**Important Notes:**
+- ⚠️ **MUST change passwords** from the sample values before running
+- Alternative: Remove password parameters and configure key pair authentication
+- Verify users and roles are created successfully before proceeding
+
+**Expected Result:** Six users and five roles created
+
+---
+
+#### Script 2: Grant Roles and Create Database
+**File:** `scripts/02_grant_roles_create_database.sql`  
+**Role Required:** USERADMIN, then role that owns warehouse, then SYSADMIN  
+**Description:** Assigns roles to users, grants warehouse access, creates database
+
+**What it does:**
+- Grants appropriate roles to each user (some users have multiple roles)
+- Grants warehouse USAGE privileges to all roles
+- Creates `REYNHOLM_IND_DATA` database
+- Transfers database ownership to `itc_admin` role
+
+**Important Notes:**
+- ⚠️ **MUST replace placeholders:**
+  - `<ROLE_THAT_OWNS_THE_WAREHOUSE>` with your warehouse owner role
+  - `<WAREHOUSE_YOU_WILL_USE>` with your warehouse name (e.g., `DEMO_WH`)
+- If you don't have a warehouse, uncomment the CREATE WAREHOUSE statement
+- If you cannot create users, grant these roles to your own account instead
+
+**Expected Result:** Roles granted, warehouse accessible, database created
+
+---
+
+#### Script 3: Create Customer Table with PII Data
+**File:** `scripts/03_create_customer_table.sql`  
+**Role Required:** itc_admin  
+**Description:** Creates managed access schema and populates with sample PII data
+
+**What it does:**
+- Creates `BASEMENT` schema with managed access enabled
+- Creates `CUSTOMERS` table with 200 rows of fake but realistic PII
+- Sources data from Snowflake sample TPCDS dataset
+- Grants database, schema, and table access to appropriate roles
+- Randomly populates `C_BIRTH_COUNTRY` (UK/US/FRANCE) and `OPTIN` (YES/NO/NULL)
+
+**Important Notes:**
+- Uses `UNIFORM()` function to randomly distribute country and opt-in values
+- Managed Access Schema enforces centralized privilege management
+- Data is fake but realistic for demonstration purposes
+- Verify 200 rows are created
+
+**Expected Result:** Schema and table created with 200 rows of sample PII data
+
+---
+
+### Phase 2: Policy Implementation (30 minutes)
+
+#### Script 4: Setup Policy Framework
+**File:** `scripts/04_setup_policy_framework.sql`  
+**Role Required:** itc_admin, then SECURITYADMIN  
+**Description:** Sets up infrastructure for row access and masking policies
+
+**What it does:**
+- Grants policy creation privileges to `infosec` role
+- Creates `ROW_ACCESS_MAPPING` table to store access rules
+- Demonstrates Managed Access Schema behavior (ownership grants blocked)
+- Grants SELECT and INSERT privileges on mapping table
+
+**Important Notes:**
+- Demonstrates separation of duties (data owner grants policy rights to security team)
+- Shows that Managed Access Schemas prevent ownership grants
+- Only specific privileges (SELECT, INSERT) are granted instead
+
+**Expected Result:** Mapping table created, policy privileges granted to infosec role
+
+---
+
+#### Script 5: Row Access Policy
+**File:** `scripts/05_row_access_policy.sql`  
+**Role Required:** infosec, then SECURITYADMIN, then itc_admin, then marketing  
+**Description:** Creates and applies row-level access controls
+
+**What it does:**
+- Populates mapping table with access rules (which roles see which countries)
+- Creates row access policy `makes_no_sense` with logic:
+  - Marketing sees UK customers only
+  - IT sees US customers only
+  - Executive sees France customers only
+  - Admin and INFOSEC see no rows
+- Grants APPLY privilege to `itc_admin`
+- Applies policy to `CUSTOMERS` table
+- Tests policy with different roles
+
+**Important Notes:**
+- Policy uses mapping table for flexible rule management
+- Includes special logic for data sharing (`INVOKER_SHARE()`)
+- Default deny approach (security best practice)
+- Different roles will see different row counts
+
+**Expected Result:** Row access policy applied; different roles see different data subsets
+
+---
+
+#### Script 6: Column Masking Policy
+**File:** `scripts/06_column_masking_policy.sql`  
+**Role Required:** infosec, then SECURITYADMIN, then itc_admin, then marketing  
+**Description:** Implements dynamic data masking on email column
+
+**What it does:**
+- Creates conditional masking policy `hide_optouts`
+  - Shows email if `OPTIN = 'YES'`
+  - Masks email with `***MASKED***` otherwise
+- Creates alternative full masking policy (if conditional not available)
+- Grants APPLY privilege to `itc_admin`
+- Applies masking policy to `C_EMAIL_ADDRESS` column
+- Tests combined effect of row access + masking policies
+
+**Important Notes:**
+- Conditional masking was a preview feature at original publication
+- If conditional masking not available, use the full masking alternative
+- Masking is evaluated at query time (no data duplication)
+- Works in conjunction with row access policies
+
+**Expected Result:** Email addresses masked based on opt-in status; both policies working together
+
+---
+
+### Phase 3: Advanced Features (25 minutes)
+
+#### Script 7: Object Tagging
+**File:** `scripts/07_object_tagging.sql`  
+**Role Required:** SECURITYADMIN, ACCOUNTADMIN, infosec, itc_admin  
+**Description:** Applies metadata tags for governance and classification
+
+**What it does:**
+- Grants tag creation rights to `infosec` role
+- Grants tag application rights to `itc_admin` role
+- Creates tags: `peter` and `calendar` (demo tags)
+- Applies tags to `CUSTOMERS` table and `C_EMAIL_ADDRESS` column
+- Demonstrates tag retrieval using `SYSTEM$GET_TAG`
+- Shows tag inheritance through views
+
+**Important Notes:**
+- Object Tagging was a preview feature at original publication
+- Tags are created centrally to avoid namespace sprawl
+- Tags inherit through clones, views, and derived objects
+- In production, use meaningful tag names (data_classification, pii_category, etc.)
+
+**Expected Result:** Tags created and applied to table and columns
+
+---
+
+#### Script 8: Data Classification
+**File:** `scripts/08_data_classification.sql`  
+**Role Required:** it, then itc_admin  
+**Description:** Uses Snowflake's automated classification to identify PII
+
+**What it does:**
+- Runs `EXTRACT_SEMANTIC_CATEGORIES()` on `CUSTOMERS` table
+- Parses JSON results using `FLATTEN()` and variant types
+- Creates readable classification report showing:
+  - Privacy categories (IDENTIFIER, QUASI_IDENTIFIER, SENSITIVE)
+  - Semantic categories (EMAIL, NAME, GENDER, etc.)
+  - Confidence probability scores
+- Saves classification history to a table
+- Demonstrates JSON processing techniques
+
+**Important Notes:**
+- Classification was a preview feature at original publication
+- Returns JSON that requires parsing for readability
+- Confidence scores indicate classification accuracy
+- Results can drive automated policy application
+- Demonstrates Snowflake's semi-structured data capabilities
+
+**Expected Result:** Classification report showing PII columns with confidence scores
+
+---
+
+### Phase 4: Cleanup (5 minutes)
+
+#### Script 9: Cleanup
+**File:** `scripts/09_cleanup.sql`  
+**Role Required:** ACCOUNTADMIN, itc_admin, USERADMIN  
+**Description:** Removes all lab objects and stops costs
+
+**What it does:**
+- Drops data share (if created)
+- Drops `REYNHOLM_IND_DATA` database (cascades to all objects)
+- Drops all six demo users
+- Drops all five custom roles
+- Drops utility database and API integration (if created for grading)
+- Suspends warehouse to stop compute costs
+
+**Important Notes:**
+- ⚠️ Run in the correct order to avoid dependency errors
+- If data sharing was used, clean up consumer account FIRST
+- Replace `<WAREHOUSE_YOU_WILL_USE>` with your warehouse name
+- Verify all objects are removed before completing
+
+**Expected Result:** All lab objects removed, warehouse suspended, no ongoing costs
+
+---
+
+## 🎯 Optional: Data Sharing (Not Scripted)
+
+**Prerequisites:** Second Enterprise Edition Snowflake account
+
+**Steps:**
+1. Complete scripts 1-6 first
+2. Follow UI-based instructions in the main `README.md` under "See policy enforcement through a secure data share"
+3. Create share named `REYNHOLM_IND_DATA_SHARE` (matches policy logic)
+4. Add `CUSTOMERS` table to the share
+5. Share with your second account
+6. In consumer account, create database from share
+7. Query data to observe policy enforcement across accounts
+8. Clean up: Drop shared database in consumer, then drop share in provider
+
+**What it demonstrates:**
+- Row access and masking policies enforce through data sharing
+- Shared data is protected without consumer-side policy management
+- Special share logic in row access policy (`INVOKER_SHARE()`)
+
+---
+
+## ✅ Best Practices for Script Execution
+
+1. **Read Before Running:** Review each script's comments before execution
+2. **Execute in Order:** Do not skip scripts or change execution order
+3. **One Script at a Time:** Complete and verify each script before proceeding
+4. **Check Placeholders:** Replace all `<PLACEHOLDER>` values before running
+5. **Verify Results:** Run verification queries at the end of each script
+6. **Use Snowsight:** Execute in Snowsight for best experience and syntax highlighting
+7. **Copy Sections:** Don't run entire scripts at once; execute logical sections
+8. **Watch for Errors:** If errors occur, read error messages carefully before retrying
+9. **Role Switching:** Pay attention to `USE ROLE` statements (especially if not using separate users)
+10. **Save Progress:** Bookmark your place if you need to pause
+
+---
+
+## 🔧 Troubleshooting Tips
+
+### Common Issues
+
+**Issue:** "Object does not exist" errors  
+**Solution:** Verify previous scripts completed successfully; check object names for typos
+
+**Issue:** "Insufficient privileges" errors  
+**Solution:** Verify you're using the correct role; check `USE ROLE` statements
+
+**Issue:** Policies not applying as expected  
+**Solution:** Verify policy is attached using `SHOW ROW ACCESS POLICIES` or `SHOW MASKING POLICIES`
+
+**Issue:** Warehouse timeout errors  
+**Solution:** Resume warehouse or increase auto-suspend timeout
+
+**Issue:** Sample data not accessible  
+**Solution:** Contact account admin to enable `SNOWFLAKE_SAMPLE_DATA`
+
+### Getting Help
+
+- Review the main `README.md` for detailed troubleshooting section
+- Check script comments for context-specific notes
+- Verify prerequisites are met before starting
+- Ensure all placeholders are replaced with actual values
+
+---
+
+## 📊 Expected Timeline
+
+| Phase | Scripts | Time | Cumulative |
+|-------|---------|------|------------|
+| Setup | 1-3 | 20 min | 20 min |
+| Policies | 4-6 | 30 min | 50 min |
+| Advanced | 7-8 | 25 min | 75 min |
+| Cleanup | 9 | 5 min | 80 min |
+| **Total** | **9 scripts** | **~80 min** | |
+
+*Note: Times are estimates and may vary based on familiarity with Snowflake and environment setup*
+
+---
+
+## 🎓 Learning Checkpoints
+
+After completing each phase, you should understand:
+
+**After Phase 1:**
+- How to create users and roles in Snowflake
+- Role-based access control (RBAC) fundamentals
+- Database and schema creation
+- Managed Access Schema concept
+
+**After Phase 2:**
+- Row Access Policies for data filtering
+- Dynamic Data Masking for column protection
+- Separation of duties (policy creation vs application)
+- Policy evaluation and testing
+
+**After Phase 3:**
+- Object tagging for metadata management
+- Automated data classification
+- JSON processing in Snowflake
+- Governance and compliance support
+
+**After Phase 4:**
+- Proper cleanup procedures
+- Cost stewardship best practices
+- Dependency management in Snowflake
+
+---
+
+## 📚 Additional Resources
+
+- [Main README.md](../README.md) - Comprehensive lab overview
+- [Snowflake Documentation](https://docs.snowflake.com/) - Official documentation
+- [Getting Started with PII Quickstart](https://quickstarts.snowflake.com/guide/getting-started-with-pii/) - Original quickstart guide
+- [BUILD 2021 Session](https://www.snowflake.com/build/) - Original presentation
+
+---
+
+**Ready to begin?** Start with [scripts/01_setup_users_roles.sql](../scripts/01_setup_users_roles.sql)
+
+**Questions?** Review the troubleshooting section in the main README.md or submit feedback via GitHub Issues.
+
