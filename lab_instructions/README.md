@@ -2,6 +2,11 @@
 
 This document provides detailed step-by-step instructions for executing the PII Data Protection Hands-on Lab scripts in Snowsight.
 
+- [Phase 1:  Environment Setup](README.md#phase-1-environment-setup-20-minutes)
+- [Phase 2: Policy Implementation](README.md#phase-2-policy-implementation-30-minutes)
+- [Phase 3: Advanced Features ](README.md#phase-3-advanced-features-25-minutes)
+
+
 ---
 
 ## 📋 Prerequisites
@@ -12,8 +17,6 @@ Before starting the lab, ensure you have:
 2. **Required Roles:** Access to ACCOUNTADMIN, SECURITYADMIN, SYSADMIN, and USERADMIN
 3. **Sample Data:** Access to `SNOWFLAKE_SAMPLE_DATA` database
 4. **Warehouse:** A warehouse available for compute (or permissions to create one)
-5. **Browser:** Snowsight web interface open and ready
-
 ---
 
 ## 🚀 Script Execution Order
@@ -23,7 +26,9 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ### Phase 1: Environment Setup (20 minutes)
 
 #### Script 1: Setup Users and Roles
-**File:** `scripts/01_setup_users_roles.sql`  
+
+Script file to Execute [01_setup_users_roles.sql](/scripts/01_setup_users_roles.sql)
+
 **Role Required:** USERADMIN  
 **Description:** Creates six demo users and five custom roles for the lab
 
@@ -42,7 +47,8 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ---
 
 #### Script 2: Grant Roles and Create Database
-**File:** `scripts/02_grant_roles_create_database.sql`  
+Script file to Execute [02_grant_roles_create_database.sql](/scripts/02_grant_roles_create_database.sql)
+
 **Role Required:** USERADMIN, then role that owns warehouse, then SYSADMIN  
 **Description:** Assigns roles to users, grants warehouse access, creates database
 
@@ -64,7 +70,8 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ---
 
 #### Script 3: Create Customer Table with PII Data
-**File:** `scripts/03_create_customer_table.sql`  
+Script file to Execute [03_create_customer_table.sql](/scripts/03_create_customer_table.sql)
+
 **Role Required:** itc_admin  
 **Description:** Creates managed access schema and populates with sample PII data
 
@@ -88,7 +95,10 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ### Phase 2: Policy Implementation (30 minutes)
 
 #### Script 4: Setup Policy Framework
-**File:** `scripts/04_setup_policy_framework.sql`  
+
+Script file to Execute [04_setup_policy_framework.sql](/scripts/04_setup_policy_framework.sql)
+
+
 **Role Required:** itc_admin, then SECURITYADMIN  
 **Description:** Sets up infrastructure for row access and masking policies
 
@@ -108,7 +118,10 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ---
 
 #### Script 5: Row Access Policy
-**File:** `scripts/05_row_access_policy.sql`  
+
+Script file to Execute [05_row_access_policy.sql](/scripts/05_row_access_policy.sql)
+
+
 **Role Required:** infosec, then SECURITYADMIN, then itc_admin, then marketing  
 **Description:** Creates and applies row-level access controls
 
@@ -134,6 +147,9 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ---
 
 #### Script 6: Column Masking Policy
+
+Script file to Execute [06_column_masking_policy.sql](/scripts/06_column_masking_policy.sql)
+
 **File:** `scripts/06_column_masking_policy.sql`  
 **Role Required:** infosec, then SECURITYADMIN, then itc_admin, then marketing  
 **Description:** Implements dynamic data masking on email column
@@ -160,6 +176,9 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ### Phase 3: Advanced Features (25 minutes)
 
 #### Script 7: Object Tagging
+
+Script file to Execute [07_object_tagging.sql](/scripts/07_object_tagging.sql)
+
 **File:** `scripts/07_object_tagging.sql`  
 **Role Required:** SECURITYADMIN, ACCOUNTADMIN, infosec, itc_admin  
 **Description:** Applies metadata tags for governance and classification
@@ -183,7 +202,9 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 ---
 
 #### Script 8: Data Classification
-**File:** `scripts/08_data_classification.sql`  
+    
+Script file to Execute [08_data_classification.sql](/scripts/08_data_classification.sql)
+
 **Role Required:** it, then itc_admin  
 **Description:** Uses Snowflake's automated classification to identify PII
 
@@ -233,42 +254,6 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 
 ---
 
-## 🎯 Optional: Data Sharing (Not Scripted)
-
-**Prerequisites:** Second Enterprise Edition Snowflake account
-
-**Steps:**
-1. Complete scripts 1-6 first
-2. Follow UI-based instructions in the main `README.md` under "See policy enforcement through a secure data share"
-3. Create share named `REYNHOLM_IND_DATA_SHARE` (matches policy logic)
-4. Add `CUSTOMERS` table to the share
-5. Share with your second account
-6. In consumer account, create database from share
-7. Query data to observe policy enforcement across accounts
-8. Clean up: Drop shared database in consumer, then drop share in provider
-
-**What it demonstrates:**
-- Row access and masking policies enforce through data sharing
-- Shared data is protected without consumer-side policy management
-- Special share logic in row access policy (`INVOKER_SHARE()`)
-
----
-
-## ✅ Best Practices for Script Execution
-
-1. **Read Before Running:** Review each script's comments before execution
-2. **Execute in Order:** Do not skip scripts or change execution order
-3. **One Script at a Time:** Complete and verify each script before proceeding
-4. **Check Placeholders:** Replace all `<PLACEHOLDER>` values before running
-5. **Verify Results:** Run verification queries at the end of each script
-6. **Use Snowsight:** Execute in Snowsight for best experience and syntax highlighting
-7. **Copy Sections:** Don't run entire scripts at once; execute logical sections
-8. **Watch for Errors:** If errors occur, read error messages carefully before retrying
-9. **Role Switching:** Pay attention to `USE ROLE` statements (especially if not using separate users)
-10. **Save Progress:** Bookmark your place if you need to pause
-
----
-
 ## 🔧 Troubleshooting Tips
 
 ### Common Issues
@@ -294,20 +279,6 @@ Execute the scripts in the following order. **Do not skip scripts** as each buil
 - Check script comments for context-specific notes
 - Verify prerequisites are met before starting
 - Ensure all placeholders are replaced with actual values
-
----
-
-## 📊 Expected Timeline
-
-| Phase | Scripts | Time | Cumulative |
-|-------|---------|------|------------|
-| Setup | 1-3 | 20 min | 20 min |
-| Policies | 4-6 | 30 min | 50 min |
-| Advanced | 7-8 | 25 min | 75 min |
-| Cleanup | 9 | 5 min | 80 min |
-| **Total** | **9 scripts** | **~80 min** | |
-
-*Note: Times are estimates and may vary based on familiarity with Snowflake and environment setup*
 
 ---
 
@@ -339,17 +310,4 @@ After completing each phase, you should understand:
 - Dependency management in Snowflake
 
 ---
-
-## 📚 Additional Resources
-
-- [Main README.md](../README.md) - Comprehensive lab overview
-- [Snowflake Documentation](https://docs.snowflake.com/) - Official documentation
-- [Getting Started with PII Quickstart](https://quickstarts.snowflake.com/guide/getting-started-with-pii/) - Original quickstart guide
-- [BUILD 2021 Session](https://www.snowflake.com/build/) - Original presentation
-
----
-
-**Ready to begin?** Start with [scripts/01_setup_users_roles.sql](../scripts/01_setup_users_roles.sql)
-
-**Questions?** Review the troubleshooting section in the main README.md or submit feedback via GitHub Issues.
 

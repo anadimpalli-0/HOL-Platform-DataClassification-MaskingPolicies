@@ -1,12 +1,7 @@
 # College of Platform HOL: Process PII Data with Snowflake Security Features
 **Master data governance, security, and compliance using Snowflake's RBAC, DAC, Row Access Policies, and Dynamic Data Masking.**
 
-![Lab Architecture](images/BUILD_2021_PII_Journey--Share_Data.jpeg)
-
----
-
-## 🎬 Lab Overview Video
-This hands-on lab is based on the "Journey to Processing PII in the Data Cloud" session from Snowflake BUILD 2021. Watch the session replay at the [Snowflake BUILD 2021 site](https://www.snowflake.com/build/).
+![Lab Architecture](images/Architecture.png)
 
 ---
 
@@ -24,32 +19,32 @@ Learn how to protect sensitive data using Snowflake's enterprise security featur
 - **Task 5:** Create **Object Tags** and use **Classification** to identify and categorize PII data automatically
 - **Task 6 (Optional):** Test policy enforcement through **Secure Data Sharing** across Snowflake accounts
 
+
+Detailed instruction on executing the Lab can be found [HERE](lab_instructions/README.md) 
+
 ### ⏲️ Estimated Lab Timeline
 
-Provide a brief agenda to help SEs understand pacing:
+This lab is designed to be completed in approximately 60-90 minutes:
 
 - **Phase 1 (Setup & RBAC):** ~20 min
 - **Phase 2 (Row & Column Security):** ~30 min
 - **Phase 3 (Tagging, Classification & Sharing):** ~25 min
 - **Phase 4 (Cleanup):** ~5 min
-
-Include checkpoints (DORAs), recommended "stop points," and common customer questions.
   
 ---
 
 ## 📖 Table of Contents
 
-- [Why this Matters](#why-this-matters)
-- [Suggested Discovery Questions](#suggested-discovery-questions)
-- [Repository Structure](#repository-structure)
-- [Prerequisites & Setup Details](#prerequisites--setup-details)
-- [Estimated Lab Timeline](#estimated-lab-timeline)
-- [Placeholder & Naming Conventions](#placeholder--naming-conventions)
-- [Troubleshooting & FAQ](#troubleshooting--faq)
-- [Cleanup & Cost-Stewardship Procedures](#cleanup--cost-stewardship-procedures)
-- [Grading Instructions](#grading-instructions)
-- [Advanced Concepts (Salted in Training)](#advanced-concepts-salted-in-training)
-- [Links to Internal Resources & Helpful Documents](#links-to-internal-resources--helpful-documents)
+- [Why this Matters](#-why-this-matters)
+- [Suggested Discovery Questions](#-suggested-discovery-questions)
+- [Repository Structure](#-repository-structure)
+- [Prerequisites & Setup Details](#-prerequisites--setup-details)
+- [Estimated Lab Timeline](#️-estimated-lab-timeline)
+- [Troubleshooting & FAQ](#️-troubleshooting--faq)
+- [Cleanup & Cost-Stewardship Procedures](#-cleanup--cost-stewardship-procedures)
+- [Grading Instructions](#-grading-instructions)
+- [Advanced Concepts (Salted in Training)](#-advanced-concepts-salted-in-training)
+- [Links to Internal Resources & Helpful Documents](#-links-to-internal-resources--helpful-documents)
 
 ---
 
@@ -58,8 +53,6 @@ Include checkpoints (DORAs), recommended "stop points," and common customer ques
 - **Business value:** Organizations processing PII face complex regulatory requirements (GDPR, CCPA, HIPAA). This lab demonstrates how Snowflake enables compliance without sacrificing data accessibility, accelerating time-to-insight by enabling self-service analytics on protected data while maintaining audit trails.
 
 - **Pricing impact:** Security features like Row Access Policies and Dynamic Data Masking are included in Enterprise Edition at no additional cost. The compute costs are minimal as policies are evaluated at query time with negligible overhead. Enable virtual warehouses only when needed to optimize costs.
-
-- **Customer stories:** Reference the [Journey to Processing PII in the Data Cloud blog post](https://www.snowflake.com/blog/the-journey-to-processing-pii-in-the-data-cloud/) for real-world applications and best practices from Snowflake BUILD 2021.
 
 ---
 
@@ -101,7 +94,6 @@ Provide **5 to 6 open-ended questions** for customer conversations related to th
     └── faq.md
 ```
 ---
-
 ## ✅ Prerequisites & Setup Details
 
 Internally helpful setup requirements:
@@ -116,7 +108,6 @@ Internally helpful setup requirements:
   - ACCOUNTADMIN, SECURITYADMIN, SYSADMIN, and USERADMIN roles
   - Access to Snowflake sample data (`SNOWFLAKE_SAMPLE_DATA` database)
   - *Optional:* Second Enterprise Edition Snowflake Account for data sharing demonstration
-  - *Preview Features (at time of original publication):* Conditional Masking, Object Tagging, and Classification (ensure these are activated if still in preview)
 
 - **Hardware/software:** 
   - Supported web browser for Snowsight
@@ -124,56 +115,50 @@ Internally helpful setup requirements:
   - *Optional:* SnowSQL CLI for key pair authentication demonstration
 
 ---
+### 🛠️ Lab Instructions
 
-## 🔖 Placeholder & Naming Conventions
+Detailed instruction on executing the scripts can be found [HERE](/lab_instructions/README.md)'
 
-Clearly define naming conventions:
+## 📊 Grading Instructions
 
-- **Warehouse:** Replace `<WAREHOUSE_YOU_WILL_USE>` with your warehouse name (e.g., `DEMO_WH`)
-- **Warehouse Owner Role:** Replace `<ROLE_THAT_OWNS_THE_WAREHOUSE>` with the appropriate role
-- **Database:** `REYNHOLM_IND_DATA` (fictional company from IT Crowd)
-- **Schema:** `REYNHOLM_IND_DATA.BASEMENT` (with MANAGED ACCESS)
-- **Users:** Six fictional users from "The IT Crowd" TV show:
-  - `richmond@itcrowd` (ITC_ADMIN role)
-  - `moss@itcrowd` (INFOSEC + IT roles)
-  - `roy@itcrowd` (IT role)
-  - `jen@itcrowd` (IT role)
-  - `douglas@itcrowd` (MARKETING role)
-  - `denholm@itcrowd` (EXECUTIVE role)
-- **Roles:** `ITC_ADMIN`, `MARKETING`, `IT`, `INFOSEC`, `EXECUTIVE`
-- **Passwords:** **MUST be changed from sample values** - use strong passwords or key pair authentication
-- **Secrets management:** Never commit actual passwords or keys to GitHub
+### How to Complete Lab Grading
 
----
+Congratulations! After completing the lab, validate your work using the automated grading system (DORA).
 
-## ⚠️ Troubleshooting & FAQ
+**Prerequisites for Grading:**
+1. Complete all lab steps through Section 6 (Column Masking Policy)
+2. Ensure all database objects are created as specified
+3. Have ACCOUNTADMIN privileges to create API integrations
 
-Common errors and resolutions:
+**Grading Steps:**
 
-**Issue:** "Object does not exist" error when accessing `SNOWFLAKE_SAMPLE_DATA`  
-**Cause:** Sample data not available in the account  
-**Solution:** Contact your account administrator to ensure `SNOWFLAKE_SAMPLE_DATA` is accessible, or request it through Snowflake support.
+1. **Set up the Grading Environment:**
+   - Run the [SE_GREETER.sql](config/SE_GREETER.sql) script first
+   - **IMPORTANT:** Edit your contact information in the greeting query (replace `<snowflake email>`, `<First Name>`, `<Last Name>`)
 
-**Issue:** "Insufficient privileges" when creating users or roles  
-**Cause:** Not using appropriate administrative role  
-**Solution:** Ensure you're using `USERADMIN` for user/role creation, `SECURITYADMIN` for grants, and `SYSADMIN` for database objects.
+2. **Execute the Grading Script:**
+   - Run the [DoraGrading.sql](config/DoraGrading.sql) script
+   - Each validation query will return a result indicating pass/fail status
 
-**Issue:** Cannot grant ownership in Managed Access Schema  
-**Cause:** This is expected behavior - Managed Access Schemas prevent direct ownership grants  
-**Solution:** Use specific grants (SELECT, INSERT, etc.) instead of OWNERSHIP as demonstrated in the lab.
+3. **Interpret Results:**
+   - ✅ = Step completed successfully
+   - ❌ = Step needs attention - review the description for details
+   - The `actual` vs `expected` columns show what was found vs what should exist
 
-**Issue:** Row Access Policy or Masking Policy not applying  
-**Cause:** Policy may not be attached to the table or column correctly  
-**Solution:** Verify policy attachment using `SHOW ROW ACCESS POLICIES` and `SHOW MASKING POLICIES`.
+**Validation Checks:**
+- ✅ Database `REYNHOLM_IND_DATA` exists
+- ✅ Schema `BASEMENT` exists with Managed Access
+- ✅ Table `CUSTOMERS` contains 200 rows
+- ✅ Row Access Mapping table exists and contains policy rules
+- ✅ Row Access Policy `makes_no_sense` is created and applied
+- ✅ Masking Policy `hide_optouts` is created and applied to `C_EMAIL_ADDRESS` column
+- ✅ All roles have appropriate grants
 
-**Issue:** Classification or Tagging features not available  
-**Cause:** Preview features may not be enabled in your account  
-**Solution:** Contact your account team to enable preview features, or skip those optional sections.
+**If all validations return ✅, you have successfully completed the HOL! 🎉**
 
-Provide internal Slack channels or support queue links for additional assistance.
+For detailed grading instructions, see [config/README.md](config/README.md)
 
 ---
-
 ## 🧹 Cleanup & Cost-Stewardship Procedures
 
 ### 🗑 Cleanup Instructions:
@@ -253,47 +238,33 @@ You can run the complete cleanup script available at: [scripts/09_cleanup.sql](s
 
 ---
 
-## 📊 Grading Instructions
+## ⚠️ Troubleshooting & FAQ
 
-### How to Complete Lab Grading
+Common errors and resolutions:
 
-Congratulations! After completing the lab, validate your work using the automated grading system (DORA).
+**Issue:** "Object does not exist" error when accessing `SNOWFLAKE_SAMPLE_DATA`  
+**Cause:** Sample data not available in the account  
+**Solution:** Contact your account administrator to ensure `SNOWFLAKE_SAMPLE_DATA` is accessible, or request it through Snowflake support.
 
-**Prerequisites for Grading:**
-1. Complete all lab steps through Section 6 (Column Masking Policy)
-2. Ensure all database objects are created as specified
-3. Have ACCOUNTADMIN privileges to create API integrations
+**Issue:** "Insufficient privileges" when creating users or roles  
+**Cause:** Not using appropriate administrative role  
+**Solution:** Ensure you're using `USERADMIN` for user/role creation, `SECURITYADMIN` for grants, and `SYSADMIN` for database objects.
 
-**Grading Steps:**
+**Issue:** Cannot grant ownership in Managed Access Schema  
+**Cause:** This is expected behavior - Managed Access Schemas prevent direct ownership grants  
+**Solution:** Use specific grants (SELECT, INSERT, etc.) instead of OWNERSHIP as demonstrated in the lab.
 
-1. **Set up the Grading Environment:**
-   - Run the [SE_GREETER.sql](config/SE_GREETER.sql) script first
-   - **IMPORTANT:** Edit your contact information in the greeting query (replace `<snowflake email>`, `<First Name>`, `<Last Name>`)
+**Issue:** Row Access Policy or Masking Policy not applying  
+**Cause:** Policy may not be attached to the table or column correctly  
+**Solution:** Verify policy attachment using `SHOW ROW ACCESS POLICIES` and `SHOW MASKING POLICIES`.
 
-2. **Execute the Grading Script:**
-   - Run the [DoraGrading.sql](config/DoraGrading.sql) script
-   - Each validation query will return a result indicating pass/fail status
+**Issue:** Classification or Tagging features not available  
+**Cause:** Preview features may not be enabled in your account  
+**Solution:** Contact your account team to enable preview features, or skip those optional sections.
 
-3. **Interpret Results:**
-   - ✅ = Step completed successfully
-   - ❌ = Step needs attention - review the description for details
-   - The `actual` vs `expected` columns show what was found vs what should exist
-
-**Validation Checks:**
-- ✅ Database `REYNHOLM_IND_DATA` exists
-- ✅ Schema `BASEMENT` exists with Managed Access
-- ✅ Table `CUSTOMERS` contains 200 rows
-- ✅ Row Access Mapping table exists and contains policy rules
-- ✅ Row Access Policy `makes_no_sense` is created and applied
-- ✅ Masking Policy `hide_optouts` is created and applied to `C_EMAIL_ADDRESS` column
-- ✅ All roles have appropriate grants
-
-**If all validations return ✅, you have successfully completed the HOL! 🎉**
-
-For detailed grading instructions, see [config/README.md](config/README.md)
+Provide internal Slack channels or support queue links for additional assistance.
 
 ---
-
 ## 📘 Advanced Concepts (Salted in Training)
 
 Brief callouts to deeper internal learning topics:
@@ -323,27 +294,19 @@ Brief callouts to deeper internal learning topics:
 - [Row Access Policies](https://docs.snowflake.com/en/user-guide/security-row.html)
 - [Secure Data Sharing](https://docs.snowflake.com/en/user-guide/data-sharing-intro.html)
 - [Object Tagging](https://docs.snowflake.com/en/user-guide/object-tagging.html)
-- [Key Pair Authentication](https://docs.snowflake.com/en/user-guide/key-pair-auth.html)
 - [JSON Processing Basics](https://docs.snowflake.com/en/user-guide/json-basics-tutorial.html)
+- [Snowflake Quickstarts](https://www.snowflake.com/en/developers/guides/getting-started-with-pii/)
 
-### Additional Resources
-- [Snowflake BUILD 2021 Session](https://www.snowflake.com/build/)
-- [Blog: Journey to Processing PII in the Data Cloud](https://www.snowflake.com/blog/the-journey-to-processing-pii-in-the-data-cloud/)
-- [Snowflake Quickstarts](https://quickstarts.snowflake.com/)
-- [Security & Compliance Best Practices](https://docs.snowflake.com/en/user-guide/security-best-practices.html)
 
 ---
 
 ## 👤 Author & Support
-
-**Lab created by:** Snowflake Platform College Team  
-**Based on:** BUILD 2021 "Journey to Processing PII in the Data Cloud" session by sanderiam  
-**Created on:** June 2021 | **Last updated:** November 2024
+**Lab created by:** Aparna Nadimpalli – SE Enablement Senior Manager  
+**Created on:** October 29, 2025 | **Last updated:** November 17, 2025 
 
 💬 **Need Help or Have Feedback?**  
-- Internal Snowflake Support: Contact your Platform College team
-- GitHub Issues: [Submit feedback or report issues](https://github.com/Snowflake-Labs/sfguides/issues)
-- Original Quickstart: [Getting Started with PII](https://quickstarts.snowflake.com/guide/getting-started-with-pii/)
+- Slack Channel: [#College-of-Platform](#)  
+- Slack DM: [@aparna.nadimpalli](https://snowflake.enterprise.slack.com/team/U03RQG03MJR)  
+- Email: [aparna.nadimpalli@snowflake.com](mailto:aparna.nadimpalli@snowflake.com)
 
 🌟 *We greatly value your feedback to continuously improve our HOL experiences!*
-
