@@ -117,7 +117,7 @@ Internally helpful setup requirements:
 ---
 ### 🛠️ Lab Instructions
 
-Detailed instruction on executing the scripts can be found [HERE](/lab_instructions/README.md)'
+Detailed instruction on executing the scripts can be found [HERE](/lab_instructions/README.md)
 
 ## 📊 Grading Instructions
 
