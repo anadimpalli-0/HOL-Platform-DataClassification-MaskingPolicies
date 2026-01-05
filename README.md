@@ -7,7 +7,7 @@
 
 ## 🛠️ Hands-On Lab Overview
 
-In this hands-on lab, you'll step into the shoes of a **Data Security Engineer** tasked with **implementing comprehensive data protection for PII (Personally Identifiable Information) while maintaining data accessibility for authorized users**.
+In this hands-on lab, you'll step into the shoes of a **Data Security Engineer** tasked with implementing comprehensive data protection for PII (Personally Identifiable Information) while maintaining data accessibility for authorized users.
 
 ### 📋 What You'll Do:
 Learn how to protect sensitive data using Snowflake's enterprise security features while enabling authorized access.
@@ -305,7 +305,7 @@ Brief callouts to deeper internal learning topics:
 **Created on:** October 29, 2025 | **Last updated:** November 17, 2025 
 
 💬 **Need Help or Have Feedback?**  
-- Slack Channel: [#College-of-Platform](#)  
+- Slack Channel: [#College-of-Platform](https://snowflake.enterprise.slack.com/archives/C0A3K5FT4UF)  
 - Slack DM: [@aparna.nadimpalli](https://snowflake.enterprise.slack.com/team/U03RQG03MJR)  
 - Email: [aparna.nadimpalli@snowflake.com](mailto:aparna.nadimpalli@snowflake.com)
 
