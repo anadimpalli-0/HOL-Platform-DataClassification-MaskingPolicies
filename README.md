@@ -156,7 +156,7 @@ Congratulations! After completing the lab, validate your work using the automate
 
 **If all validations return ✅, you have successfully completed the HOL! 🎉**
 
-For detailed grading instructions, see [config/README.md](config/README.md)
+Detailed grading instructions can be found [HERE](config/README.md)
 
 ---
 ## 🧹 Cleanup & Cost-Stewardship Procedures

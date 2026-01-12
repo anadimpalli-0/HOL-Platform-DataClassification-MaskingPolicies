@@ -229,6 +229,13 @@ Script file to Execute [08_data_classification.sql](/scripts/08_data_classificat
 
 ---
 
+## Next Steps
+
+### Grading
+
+Complete grading before cleanup of objects created in this Lab
+Detailed grading instructions can be found [HERE](/config/DoraGrading.sql)
+
 ### Phase 4: Cleanup (5 minutes)
 
 #### Script 9: Cleanup

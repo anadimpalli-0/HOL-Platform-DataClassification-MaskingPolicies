@@ -25,7 +25,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP01' AS step,
+        'SEPDC01' AS step,
         (
             SELECT COUNT(*) 
             FROM SNOWFLAKE.INFORMATION_SCHEMA.DATABASES
@@ -48,7 +48,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP02' AS step,
+        'SEPDC02' AS step,
         (
             SELECT COUNT(*) 
             FROM SNOWFLAKE.INFORMATION_SCHEMA.SCHEMATA
@@ -73,7 +73,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP03' AS step,
+        'SEPDC03' AS step,
         (
             SELECT COUNT(*) 
             FROM REYNHOLM_IND_DATA.BASEMENT.CUSTOMERS
@@ -95,7 +95,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP04' AS step,
+        'SEPDC04' AS step,
         (
             SELECT COUNT(*) 
             FROM TABLES
@@ -119,7 +119,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP05' AS step,
+        'SEPDC05' AS step,
         (
             SELECT COUNT(*) 
             FROM REYNHOLM_IND_DATA.BASEMENT.ROW_ACCESS_MAPPING
@@ -141,7 +141,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP06' AS step,
+        'SEPDC06' AS step,
         (
             SELECT COUNT(*) 
             FROM SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES
@@ -171,7 +171,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP07' AS step,
+        'SEPDC07' AS step,
         (
             SELECT COUNT(*) 
             FROM SNOWFLAKE.ACCOUNT_USAGE.POLICY_REFERENCES
@@ -201,7 +201,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP08' AS step,
+        'SEPDC08' AS step,
         (
             SELECT COUNT(*) 
             FROM SNOWFLAKE.ACCOUNT_USAGE.ROLES
@@ -225,7 +225,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP09' AS step,
+        'SEPDC09' AS step,
         (
             SELECT COUNT(*) 
             FROM SNOWFLAKE.ACCOUNT_USAGE.USERS
@@ -249,7 +249,7 @@ SELECT
     ) AS graded_results
 FROM (
     SELECT
-        'STEP10' AS step,
+        'SEPDC10' AS step,
         (
             SELECT COUNT(DISTINCT GRANTEE_NAME) 
             FROM SNOWFLAKE.ACCOUNT_USAGE.GRANTS_TO_USERS
@@ -267,16 +267,16 @@ FROM (
 -- Snowflake PII Data Protection HOL! 🎉
 --
 -- Validation Checklist:
--- ✅ STEP01: Database created
--- ✅ STEP02: Managed Access Schema created
--- ✅ STEP03: Customer table with 200 rows
--- ✅ STEP04: Row access mapping table created
--- ✅ STEP05: Access rules populated
--- ✅ STEP06: Row access policy applied
--- ✅ STEP07: Masking policy applied
--- ✅ STEP08: Custom roles created
--- ✅ STEP09: Demo users created
--- ✅ STEP10: Roles granted to users
+-- ✅ SEPDC01: Database created
+-- ✅ SEPDC02: Managed Access Schema created
+-- ✅ SEPDC03: Customer table with 200 rows
+-- ✅ SEPDC04: Row access mapping table created
+-- ✅ SEPDC05: Access rules populated
+-- ✅ SEPDC06: Row access policy applied
+-- ✅ SEPDC07: Masking policy applied
+-- ✅ SEPDC08: Custom roles created
+-- ✅ SEPDC09: Demo users created
+-- ✅ SEPDC10: Roles granted to users
 
 -- =============================================================================
 -- TROUBLESHOOTING GRADING ISSUES
