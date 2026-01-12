@@ -234,30 +234,7 @@ Script file to Execute [08_data_classification.sql](/scripts/08_data_classificat
 ### Grading
 
 Complete grading before cleanup of objects created in this Lab
-Detailed grading instructions can be found [HERE](/config/DoraGrading.sql)
-
-### Phase 4: Cleanup (5 minutes)
-
-#### Script 9: Cleanup
-**File:** `scripts/09_cleanup.sql`  
-**Role Required:** ACCOUNTADMIN, itc_admin, USERADMIN  
-**Description:** Removes all lab objects and stops costs
-
-**What it does:**
-- Drops data share (if created)
-- Drops `REYNHOLM_IND_DATA` database (cascades to all objects)
-- Drops all six demo users
-- Drops all five custom roles
-- Drops utility database and API integration (if created for grading)
-- Suspends warehouse to stop compute costs
-
-**Important Notes:**
-- ⚠️ Run in the correct order to avoid dependency errors
-- If data sharing was used, clean up consumer account FIRST
-- Replace `<WAREHOUSE_YOU_WILL_USE>` with your warehouse name
-- Verify all objects are removed before completing
-
-**Expected Result:** All lab objects removed, warehouse suspended, no ongoing costs
+Detailed grading instructions can be found [HERE](/config/README.md)
 
 ---
 
